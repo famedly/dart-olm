@@ -52,6 +52,16 @@ void main() async {
     bob.remove_one_time_keys(bob_s);
     expect(bob_s.session_id(), allOf(isA<String>(), isNotEmpty));
     expect(bob_s.has_received_message(), true);
+
+    for(var i = 0; i < 100; i++) {
+      final alice_message = alice_s.encrypt(test_message);
+      final bob_result = bob_s.decrypt(alice_message.type, alice_message.body);
+      expect(bob_result, test_message);
+      final bob_message = bob_s.encrypt(test_message);
+      final alice_result = alice_s.decrypt(bob_message.type, bob_message.body);
+      expect(alice_result, test_message);
+    }
+
     bob_s.free();
     alice_s.free();
     bob.free();
