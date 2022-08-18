@@ -5,4 +5,4 @@
 cd "$(dirname "$0")"/..
 ./scripts/prepare_js.sh
 ./scripts/prepare_native.sh
-pub get
+dart pub get

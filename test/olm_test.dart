@@ -1,10 +1,12 @@
 // Copyright (c) 2020 Famedly GmbH
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import 'package:olm/olm.dart' as olm;
-import 'package:test/test.dart';
 import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:test/test.dart';
+
+import 'package:olm/olm.dart' as olm;
 
 void main() async {
   const test_message = "Hello, World!";
@@ -183,7 +185,8 @@ void main() async {
     account.free();
 
     final utility = olm.Utility();
-    expect(() => utility.ed25519_verify(id_key, test_message, signature), throwsA(anything));
+    expect(() => utility.ed25519_verify(id_key, test_message, signature),
+        throwsA(anything));
     utility.free();
   });
 
@@ -204,7 +207,8 @@ void main() async {
     outbound1.free();
 
     final session2 = olm.Session();
-    expect(() => session2.create_inbound_from(account1, "", ""), throwsA(anything));
+    expect(() => session2.create_inbound_from(account1, "", ""),
+        throwsA(anything));
     session2.free();
     account1.free();
 
@@ -249,8 +253,12 @@ void main() async {
     alice_s.create_outbound(alice, bob_id_key, bob_ot_key);
     final alice_message_first = alice_s.encrypt(test_message);
     final bob_s = olm.Session();
-    bob_s.create_inbound_from(bob, json.decode(alice.identity_keys())['curve25519'], alice_message_first.body);
-    final alice_decrypted_first = bob_s.decrypt(alice_message_first.type, alice_message_first.body);
+    bob_s.create_inbound_from(
+        bob,
+        json.decode(alice.identity_keys())['curve25519'],
+        alice_message_first.body);
+    final alice_decrypted_first =
+        bob_s.decrypt(alice_message_first.type, alice_message_first.body);
     expect(alice_decrypted_first, test_message);
     bob.remove_one_time_keys(bob_s);
 
@@ -258,7 +266,8 @@ void main() async {
       final alice_plain = "Alice $i";
       try {
         final alice_message = alice_s.encrypt(alice_plain);
-        final alice_decrypted = bob_s.decrypt(alice_message.type, alice_message.body);
+        final alice_decrypted =
+            bob_s.decrypt(alice_message.type, alice_message.body);
         expect(alice_decrypted, alice_plain);
       } catch (e) {
         print("Exception in round $i");
@@ -284,8 +293,12 @@ void main() async {
     alice_s.create_outbound(alice, bob_id_key, bob_ot_key);
     final alice_message_first = alice_s.encrypt(test_message);
     final bob_s = olm.Session();
-    bob_s.create_inbound_from(bob, json.decode(alice.identity_keys())['curve25519'], alice_message_first.body);
-    final alice_decrypted_first = bob_s.decrypt(alice_message_first.type, alice_message_first.body);
+    bob_s.create_inbound_from(
+        bob,
+        json.decode(alice.identity_keys())['curve25519'],
+        alice_message_first.body);
+    final alice_decrypted_first =
+        bob_s.decrypt(alice_message_first.type, alice_message_first.body);
     expect(alice_decrypted_first, test_message);
     bob.remove_one_time_keys(bob_s);
 
@@ -294,10 +307,12 @@ void main() async {
       final bob_plain = "Bob $i";
       try {
         final alice_message = alice_s.encrypt(alice_plain);
-        final alice_decrypted = bob_s.decrypt(alice_message.type, alice_message.body);
+        final alice_decrypted =
+            bob_s.decrypt(alice_message.type, alice_message.body);
         expect(alice_decrypted, alice_plain);
         final bob_message = bob_s.encrypt(bob_plain);
-        final bob_decrypted = alice_s.decrypt(bob_message.type, bob_message.body);
+        final bob_decrypted =
+            alice_s.decrypt(bob_message.type, bob_message.body);
         expect(bob_decrypted, bob_plain);
       } catch (e) {
         print("Exception in round $i");
@@ -320,9 +335,12 @@ void main() async {
 
     final sas2 = olm.SAS();
     sas2.set_their_key(sas1_pk);
-    expect(sas2.calculate_mac("INPUT", "INFO"), allOf(isA<String>(), isNotEmpty));
-    expect(sas2.calculate_mac_long_kdf("INPUT", "INFO"), allOf(isA<String>(), isNotEmpty));
-    expect(sas2.generate_bytes("INFO", test_length), allOf(isList, hasLength(test_length)));
+    expect(
+        sas2.calculate_mac("INPUT", "INFO"), allOf(isA<String>(), isNotEmpty));
+    expect(sas2.calculate_mac_long_kdf("INPUT", "INFO"),
+        allOf(isA<String>(), isNotEmpty));
+    expect(sas2.generate_bytes("INFO", test_length),
+        allOf(isList, hasLength(test_length)));
 
     sas1.set_their_key(sas2.get_pubkey());
     final bytes1 = sas1.generate_bytes("INFO", test_length);
@@ -331,8 +349,10 @@ void main() async {
       expect(bytes1[i], bytes2[i]);
     }
 
-    expect(sas1.calculate_mac("INPUT", "INFO"), sas2.calculate_mac("INPUT", "INFO"));
-    expect(sas1.calculate_mac_long_kdf("INPUT", "INFO"), sas2.calculate_mac_long_kdf("INPUT", "INFO"));
+    expect(sas1.calculate_mac("INPUT", "INFO"),
+        sas2.calculate_mac("INPUT", "INFO"));
+    expect(sas1.calculate_mac_long_kdf("INPUT", "INFO"),
+        sas2.calculate_mac_long_kdf("INPUT", "INFO"));
 
     sas1.free();
     sas2.free();

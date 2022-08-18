@@ -1,6 +1,19 @@
 # Copyright (c) 2020 Famedly GmbH
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+include:
+  - project: "famedly/company/frontend/ci-templates"
+    ref: main
+    file: "/all.yml"
+
+
+variables:
+  FLUTTER_VERSION: 3.0.5
+  FLUTTER_IMAGE_TAG: "${FLUTTER_VERSION}"
+
+image:
+  name: registry.gitlab.com/famedly/company/frontend/flutter-dockerimages/flutter/stable:${FLUTTER_IMAGE_TAG}
+
 stages:
   - test
   - deploy
@@ -11,8 +24,36 @@ coverage:
   needs: []
   coverage: '/^\s+lines.+: (\d+.\d*%)/'
   script:
+    - echo "Server = https://geo.mirror.pkgbuild.com/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+    - |
+      cat <<EOF >> /etc/pacman.conf
+      # Testing Repositories
+      
+      [testing-debug]
+      Include = /etc/pacman.d/mirrorlist
+      
+      [community-testing-debug]
+      Include = /etc/pacman.d/mirrorlist
+      
+      [multilib-testing-debug]
+      Include = /etc/pacman.d/mirrorlist
+      
+      # Stable repositories
+      
+      [core-debug]
+      Include = /etc/pacman.d/mirrorlist
+      
+      [extra-debug]
+      Include = /etc/pacman.d/mirrorlist
+      
+      [community-debug]
+      Include = /etc/pacman.d/mirrorlist
+      
+      [multilib-debug]
+      Include = /etc/pacman.d/mirrorlist
+      EOF
     - pacman --noconfirm -Syu
-    - pacman --noconfirm -S dart firefox libolm valgrind
+    - pacman --noconfirm -S dart firefox libolm valgrind lcov glibc-debug libolm-debug
     - useradd -m test
     - chown -R 'test:' '.'
     - su -c ./scripts/prepare.sh test
@@ -20,14 +61,6 @@ coverage:
   artifacts:
     paths:
       - coverage/
-
-code_analyze:
-  image: cirrusci/flutter
-  stage: test
-  needs: []
-  allow_failure: true
-  script:
-    - flutter analyze
 
 pages:
   stage: deploy
@@ -41,3 +74,46 @@ pages:
       - public
   only:
     - main
+
+dry_run:
+  stage: deploy
+  script:
+    - dart pub publish --dry-run
+
+pub_dev:
+  stage: deploy
+  script:
+    - |
+      if [ -z "${PUB_DEV_PUBLISH_ACCESS_TOKEN}" ]; then
+        echo "Missing PUB_DEV_PUBLISH_ACCESS_TOKEN environment variable"
+        exit 1
+      fi
+
+      if [ -z "${PUB_DEV_PUBLISH_REFRESH_TOKEN}" ]; then
+        echo "Missing PUB_DEV_PUBLISH_REFRESH_TOKEN environment variable"
+        exit 1
+      fi
+
+      if [ -z "${PUB_DEV_PUBLISH_TOKEN_ENDPOINT}" ]; then
+        echo "Missing PUB_DEV_PUBLISH_TOKEN_ENDPOINT environment variable"
+        exit 1
+      fi
+
+      if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
+        echo "Missing PUB_DEV_PUBLISH_EXPIRATION environment variable"
+        exit 1
+      fi
+
+      cat <<EOF > ~/.pub-cache/credentials.json
+      {
+        "accessToken":"$(echo "${PUB_DEV_PUBLISH_ACCESS_TOKEN}" | base64 -d)",
+        "refreshToken":"$(echo "${PUB_DEV_PUBLISH_REFRESH_TOKEN}" | base64 -d)",
+        "tokenEndpoint":"${PUB_DEV_PUBLISH_TOKEN_ENDPOINT}",
+        "scopes":["https://www.googleapis.com/auth/userinfo.email","openid"],
+        "expiration":${PUB_DEV_PUBLISH_EXPIRATION}
+      }
+      EOF
+    - dart pub get
+    - dart pub publish --force
+  rules:
+    - if: $CI_COMMIT_TAG

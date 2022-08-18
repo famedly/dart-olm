@@ -3,10 +3,11 @@
 @JS('Olm')
 library js;
 
-import 'package:js/js.dart';
 import 'dart:async';
 import 'dart:js_util';
 import 'dart:typed_data';
+
+import 'package:js/js.dart';
 
 @JS("init")
 external dynamic _init();
@@ -54,9 +55,11 @@ class Session {
   external void free();
   external String pickle(String key);
   external void unpickle(String key, String data);
-  external void create_outbound(Account account, String identity_key, String one_time_key);
+  external void create_outbound(
+      Account account, String identity_key, String one_time_key);
   external void create_inbound(Account account, String message);
-  external void create_inbound_from(Account account, String identity_key, String one_time_key);
+  external void create_inbound_from(
+      Account account, String identity_key, String one_time_key);
   external String session_id();
   external bool has_received_message();
   external int encrypt_message_type();

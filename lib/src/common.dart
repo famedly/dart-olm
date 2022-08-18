@@ -4,5 +4,6 @@
 /// This exception is thrown on Native only. olm.js does not detect
 /// use-after-free, resulting in undefined behavior on Web.
 class UseAfterFreeError extends Error {
-  String toString() => 'Attempted to use (or double-free) a freed libolm object';
+  String toString() =>
+      'Attempted to use (or double-free) a freed libolm object';
 }
