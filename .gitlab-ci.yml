@@ -83,6 +83,7 @@ pub_dev:
         echo "Missing PUB_DEV_CREDENTIALS environment variable"
         exit 1
       fi
+    - mkdir -p ~/.pub-cache
     - cp "${PUB_DEV_CREDENTIALS}" ~/.pub-cache/credentials.json
     - dart pub get
     - dart pub publish --force
