@@ -58,6 +58,7 @@ coverage:
       - coverage/
 
 pages:
+  image: cirrusci/flutter
   stage: deploy
   needs: []
   script:
