@@ -6,13 +6,8 @@ include:
     ref: main
     file: "/all.yml"
 
-
-variables:
-  FLUTTER_VERSION: 3.0.5
-  FLUTTER_IMAGE_TAG: "${FLUTTER_VERSION}"
-
 image:
-  name: registry.gitlab.com/famedly/company/frontend/flutter-dockerimages/flutter/stable:${FLUTTER_IMAGE_TAG}
+  name: google/dart
 
 stages:
   - test
@@ -65,7 +60,6 @@ coverage:
 pages:
   stage: deploy
   needs: []
-  image: cirrusci/flutter
   script:
     - ./scripts/doc.sh
     - mv doc/api public
