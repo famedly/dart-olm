@@ -1,3 +1,10 @@
+# [2.0.1](https://gitlab.com/famedly/libraries/dart-olm/compare/2.0.0...2.0.1) (2022-08-18)
+
+## Features
+
+* list test in dev_dependencies ([43e9c3e9](https://gitlab.com/famedly/company/frontend/libraries/dart-olm/-/commit/43e9c3e957134e9dd8d6f73262e72b90b389e0a9))
+* update dependencies ([68556e67](https://gitlab.com/famedly/company/frontend/libraries/dart-olm/-/commit/68556e67ec3b869404a795695927869537e4ea05))
+
 # [2.0.0](https://gitlab.com/famedly/libraries/dart-olm/compare/1.3.0...2.0.0) (2021-03-19)
 
 
