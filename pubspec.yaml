@@ -3,7 +3,7 @@
 
 name: olm
 description: Dart bindings for Olm, an implementation of the olm and megolm cryptographic ratchets
-version: 2.0.1
+version: 2.0.2
 homepage: https://famedly.gitlab.io/libraries/dart-olm/
 repository: https://gitlab.com/famedly/libraries/dart-olm
 
