@@ -186,6 +186,11 @@ class Account extends _NativeObject {
         olm_account_fallback_key_length, olm_account_fallback_key, _inst);
   }
 
+  String unpublished_fallback_key() {
+    return _readStr(olm_account_unpublished_fallback_key_length,
+        olm_account_unpublished_fallback_key, _inst);
+  }
+
   String pickle(String key) {
     return _pickle(olm_pickle_account_length, olm_pickle_account, _inst, key);
   }

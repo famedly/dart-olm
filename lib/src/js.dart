@@ -39,6 +39,7 @@ class Account {
   external String identity_keys();
   external String one_time_keys();
   external String fallback_key();
+  external String unpublished_fallback_key();
   external String pickle(String key);
   external void unpickle(String key, String data);
   external void generate_one_time_keys(int count);

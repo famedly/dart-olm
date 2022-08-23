@@ -26,6 +26,7 @@ void main() async {
     final id_key1 = account.identity_keys();
     final ot_key1 = account.one_time_keys();
     final fb_key1 = account.fallback_key();
+    final ufb_key1 = account.unpublished_fallback_key();
     json.decode(fb_key1);
     final data = account.pickle(test_key);
     account.free();
@@ -34,9 +35,11 @@ void main() async {
     final id_key2 = account2.identity_keys();
     final ot_key2 = account2.one_time_keys();
     final fb_key2 = account2.fallback_key();
+    final ufb_key2 = account2.unpublished_fallback_key();
     expect(id_key1, id_key2);
     expect(ot_key1, ot_key2);
     expect(fb_key1, fb_key2);
+    expect(ufb_key1, ufb_key2);
     account2.mark_keys_as_published();
     expect(account2.max_number_of_one_time_keys(), isPositive);
     account2.free();

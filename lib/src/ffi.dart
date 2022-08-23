@@ -809,6 +809,38 @@ final _olm_account_fallback_key_unchecked = libolm.lookupFunction<
     int Function(Pointer<NativeType> account, Pointer<Uint8> fallback_key,
         int fallback_key_size)>('olm_account_fallback_key');
 
+int olm_account_unpublished_fallback_key_length(Pointer<NativeType> account) {
+  int result = _olm_account_unpublished_fallback_key_length_unchecked(account);
+  if (result == olm_error()) throw_olm(olm_account_last_error(account));
+  return result;
+}
+
+final _olm_account_unpublished_fallback_key_length_unchecked =
+    libolm.lookupFunction<IntPtr Function(Pointer<NativeType> account),
+            int Function(Pointer<NativeType> account)>(
+        'olm_account_unpublished_fallback_key_length');
+
+int olm_account_unpublished_fallback_key(
+    Pointer<NativeType> account,
+    Pointer<Uint8> unpublished_fallback_key,
+    int unpublished_fallback_key_size) {
+  int result = _olm_account_unpublished_fallback_key_unchecked(
+      account, unpublished_fallback_key, unpublished_fallback_key_size);
+  if (result == olm_error()) throw_olm(olm_account_last_error(account));
+  return result;
+}
+
+final _olm_account_unpublished_fallback_key_unchecked = libolm.lookupFunction<
+        IntPtr Function(
+            Pointer<NativeType> account,
+            Pointer<Uint8> unpublished_fallback_key,
+            IntPtr unpublished_fallback_key_size),
+        int Function(
+            Pointer<NativeType> account,
+            Pointer<Uint8> unpublished_fallback_key,
+            int unpublished_fallback_key_size)>(
+    'olm_account_unpublished_fallback_key');
+
 int olm_create_outbound_session_random_length(Pointer<NativeType> session) {
   int result = _olm_create_outbound_session_random_length_unchecked(session);
   if (result == olm_error()) throw_olm(olm_session_last_error(session));
