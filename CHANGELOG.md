@@ -1,3 +1,7 @@
+# [2.0.3]
+
+- refactor: Update dart code metrics and move to dev dependencies
+
 # [2.0.2](https://gitlab.com/famedly/libraries/dart-olm/compare/2.0.1...2.0.2) (2022-08-23)
 
 ## Features
