@@ -98,7 +98,34 @@ String _calculateMac(_CalculateMacFunc func, Pointer<NativeType> inst,
 
 void _fillRandom(Uint8List list) {
   final rng = Random.secure();
-  list.setAll(0, Iterable.generate(list.length, (i) => rng.nextInt(256)));
+
+  // generate 4 bytes at a time to speed up random number generation. This is
+  // basically a vectorized version of the commented out code.
+  // We do this because generating a random number using Random.secure() copies
+  // (up to 8) bytes via ffi. That is very slow. 4 bytes is the biggest integer
+  // we can copy at once without running into size constraints. So this
+  // somewhat speeds up the random fill (by a factor of 4) until there is a
+  // better solution.
+  // See also:
+  // https://github.com/dart-lang/sdk/blob/5eacff3ab8f9b6418c86d71e9eacc5bcb7b6ce32/sdk/lib/_internal/vm/lib/math_patch.dart#L283
+  // https://github.com/dart-lang/sdk/blob/3b8eca821c526bc80259fc67c845c2f1cc3e2f70/runtime/lib/math.cc#L23
+  //list.setAll(0, Iterable.generate(list.length, (i) => rng.nextInt(256)));
+  final temp = [0, 0, 0, 0];
+  list.setAll(
+      0,
+      Iterable.generate(list.length, (i) {
+        final pos = i % 4;
+        if (pos == 0) {
+          final n = rng.nextInt(0xffffffff);
+          // Unpacking the integer using the standard formula:
+          // https://stackoverflow.com/questions/2342114/extracting-rgb-color-components-from-integer-value
+          temp[0] = (0xff000000 & n) >> 24;
+          temp[1] = (0x00ff0000 & n) >> 16;
+          temp[2] = (0x0000ff00 & n) >> 8;
+          temp[3] = (0x000000ff & n);
+        }
+        return temp[pos];
+      }));
 }
 
 void _createRandom(
