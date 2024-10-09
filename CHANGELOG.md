@@ -1,3 +1,7 @@
+# [2.0.4]
+- chore: upgrade dart sdk (Nicolas Werner)
+- feat: speed up random number fill by about 4x (Nicolas Werner)
+
 # [2.0.3]
 
 - refactor: Update dart code metrics and move to dev dependencies
