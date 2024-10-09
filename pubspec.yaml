@@ -3,9 +3,10 @@
 
 name: olm
 description: Dart bindings for Olm, an implementation of the olm and megolm cryptographic ratchets
-version: 2.0.3
-homepage: https://famedly.gitlab.io/libraries/dart-olm/
-repository: https://gitlab.com/famedly/libraries/dart-olm
+version: 2.0.4
+homepage: https://github.com/famedly/dart-olm
+repository: https://github.com/famedly/dart-olm.git
+issues: https://github.com/famedly/dart-olm/issues
 
 environment:
   sdk: ">=2.17.0 <4.0.0"
