@@ -19,6 +19,9 @@ Future<void> init() {
 @JS()
 external List<int> get_library_version();
 
+// first step migrating to js_interop would be something like
+// extension type EncryptResult._(JSObject _) implements JSObject {
+// too lazy to figure the rest right now
 @JS()
 class EncryptResult {
   external int type;
@@ -117,6 +120,7 @@ class SAS {
   external void set_their_key(String their_key);
   external Uint8List generate_bytes(String info, int length);
   external String calculate_mac(String input, String info);
+  external String calculate_mac_fixed_base64(String input, String info);
   external String calculate_mac_long_kdf(String input, String info);
 }
 
