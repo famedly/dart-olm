@@ -3,20 +3,55 @@
 
 name: olm
 description: Dart bindings for Olm, an implementation of the olm and megolm cryptographic ratchets
-version: 2.0.4
+version: 3.0.0
 homepage: https://github.com/famedly/dart-olm
 repository: https://github.com/famedly/dart-olm.git
 issues: https://github.com/famedly/dart-olm/issues
 
 environment:
-  sdk: ">=2.17.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
-  js: ^0.6.4
-  ffi: ^2.0.0
+  js: ^0.7.1
+  ffi: ^2.1.3
 
 dev_dependencies:
-  coverage: ^1.0.1
+  coverage: ^1.11.1
   import_sorter: ^4.6.0
-  test: ^1.21.4
-  benchmark_harness: any
+  test: ^1.25.15
+  benchmark_harness: ^2.3.1
+  ffigen: ^18.0.0
+
+
+ffigen:
+  name: 'LibOLM'
+  description: 'Bindings to LibOLM'
+  output: 'lib/src/ffigen.dart'
+  comments:
+    style: any
+    length: full
+  headers:
+    entry-points:
+      - 'native/olm/include/olm/olm.h'
+      - 'native/olm/include/olm/sas.h'
+      - 'native/olm/include/olm/pk.h'
+  compiler-opts:
+  - "-I native/olm/include/"
+  functions:
+    exclude:
+      - '_.*'
+  globals:
+    exclude:
+      - '_.*'
+  structs:
+    exclude:
+      - '_.*'
+  unions:
+    exclude:
+      - '_.*'
+  typedefs:
+    exclude:
+      - '.*'
+  macros:
+    exclude:
+      - '.*'

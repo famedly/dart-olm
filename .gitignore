@@ -5,3 +5,5 @@ pubspec.lock
 doc/api/
 js/
 native/
+*.dylib
+coverage/
