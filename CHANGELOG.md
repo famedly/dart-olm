@@ -1,3 +1,17 @@
+# [3.0.0]
+
+- build: Bump version and update links to repo (Krille)
+- chore: add codeowners (Krille)
+- chore: add github action (Niklas Zender)
+- chore: Bump version (Christian Pauly)
+- chore: change codeowners (Niklas Zender)
+- chore: update license (Niklas Zender)
+- chore: upgrade dart sdk (Nicolas Werner)
+- feat: autogen bindings with ffigen (td)
+- feat: speed up random number fill by about 4x (Nicolas Werner)
+- feat: tests in ci, cleanup and pub.dev deploys (td)
+- refactor: Update dart code metrics and move to dev dependencies (Christian Pauly)
+
 # [2.0.4]
 - chore: upgrade dart sdk (Nicolas Werner)
 - feat: speed up random number fill by about 4x (Nicolas Werner)
