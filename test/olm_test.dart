@@ -361,6 +361,38 @@ void main() async {
     sas2.free();
   });
 
+  test("sas with fixed base64 hash", () async {
+    const test_length = 42;
+
+    final sas1 = olm.SAS();
+    final sas1_pk = sas1.get_pubkey();
+    expect(sas1_pk, allOf(isA<String>(), isNotEmpty, isNot(contains('\x00'))));
+
+    final sas2 = olm.SAS();
+    sas2.set_their_key(sas1_pk);
+    expect(sas2.calculate_mac_fixed_base64("INPUT", "INFO"),
+        allOf(isA<String>(), isNotEmpty));
+    expect(sas2.calculate_mac_long_kdf("INPUT", "INFO"),
+        allOf(isA<String>(), isNotEmpty));
+    expect(sas2.generate_bytes("INFO", test_length),
+        allOf(isList, hasLength(test_length)));
+
+    sas1.set_their_key(sas2.get_pubkey());
+    final bytes1 = sas1.generate_bytes("INFO", test_length);
+    final bytes2 = sas2.generate_bytes("INFO", test_length);
+    for (var i = 0; i < test_length; i++) {
+      expect(bytes1[i], bytes2[i]);
+    }
+
+    expect(sas1.calculate_mac_fixed_base64("INPUT", "INFO"),
+        sas2.calculate_mac_fixed_base64("INPUT", "INFO"));
+    expect(sas1.calculate_mac_long_kdf("INPUT", "INFO"),
+        sas2.calculate_mac_long_kdf("INPUT", "INFO"));
+
+    sas1.free();
+    sas2.free();
+  });
+
   test("pk encrypt/decrypt", () async {
     final key1 = olm.PkDecryption();
     final public1 = key1.generate_key();

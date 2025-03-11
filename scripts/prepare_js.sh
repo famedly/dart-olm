@@ -4,5 +4,5 @@
 
 cd "$(dirname "$0")"/..
 mkdir js
-# download olm 3.2.12 package: https://gitlab.matrix.org/matrix-org/olm/-/packages/89
-curl -L "https://gitlab.matrix.org/matrix-org/olm/-/package_files/374/download" | tar xz -C js
+# download olm 3.2.15 package: https://gitlab.matrix.org/matrix-org/olm/-/packages/2190
+curl -L "https://gitlab.matrix.org/matrix-org/olm/-/package_files/2572/download" | tar xz -C js
