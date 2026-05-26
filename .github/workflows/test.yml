@@ -30,7 +30,7 @@ jobs:
           ./scripts/prepare_js.sh
           ./scripts/test.sh
       - name: Codecov - Upload coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@ca0a928a4cb3911011e868128a5cd90437c12db1
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           files: ./coverage/lcov.info
